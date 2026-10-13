@@ -2,21 +2,29 @@
 
 Browser-based student life simulation set on the University of Nigeria, Nsukka campus.
 
-## v0.6
+## v0.7: the real campus
 
-- 3D tilted map (OpenFreeMap + extruded buildings), default POI labels hidden
-- 12 named places shown as emoji chips; tap one to open its sheet
-- Place actions (food, class, sleep, hustle, ...) change money, needs and the game clock
-- Player avatar that travels between places by trek, keke, okada or cab, with fares
-- HUD: time and weather, money, four need bars, bottom nav (Home / Buy / Map / Phone)
-- Admission and hostel flows live in the Phone tab (UNN Portal); roommates are in Home
-- Needs slowly decay and the game clock advances while you play
+- **Real buildings.** `public/data/campus.geojson` holds about 8,300 building outlines and 13 sports/leisure shapes
+  exported from OpenStreetMap. They are drawn as 3D blocks with colours by type (hostel, academic, admin, worship, food, medical).
+  Heights come from `building:levels` when OSM has it (very few buildings), otherwise they are estimates. Replace them as you learn real heights.
+- **35 real places** (`lib/places.ts`), all placed on their real OSM building: library, Abuja Building, Chitis, Akanu-Ibiam Stadium,
+  VC Building, Princess Alexandra Auditorium, hostels, faculties, the medical centre, First Bank, Ogige Market and more.
+  Chips appear by zoom level (tier 1 always, tier 2 closer, tier 3 closest).
+- **Free Wi-Fi spots** are tagged: library, VC building, Princess Alexandra Auditorium (ICT is waiting for a real location).
+- **Gender** is chosen at the start. Hostels and roommates always match it: boys and girls are never roommates.
+- **Courses:** only Nsukka-campus departments are playable (no Law, Medicine, Dentistry, Accountancy or Nursing).
+  Added Botany (Plant Science and Biotechnology), Microbiology (MCB), Biochemistry (BCH), and more Arts and Social Sciences courses.
+  Check the full course names in `lib/departments.ts` and fix any that are wrong.
+- Old saved games are migrated: gender is asked again, roommates are re-rolled, and courses that no longer exist reset admission.
 
-## Coordinates
+## Still needs a real location
 
-Only the 4 original places (Abuja Building, Chitis, Alvan Ikoku, Shuttle Park) came from you
-and even those were placeholders. The other 8 are placed around them as estimates.
-Every place has `verified: false` in `lib/places.ts`. Fix `lng` / `lat` there and set it to `true`.
+ICT centre, SUG Building / SUB, Shuttle Park, Hilltop Gate, Container (food, textbooks, photocopy), Marlima, Franco Refectory,
+gym, Ikenga Hotel, Pandelia Hotel, Old Carolina, Roban store, Animal Farm. Add them to `lib/places.ts` with coordinates.
+
+## Coming next
+
+Room view, phone apps (Bank, Timetable, Chats, Rides), data/airtime and Wi-Fi, parties, SUG elections.
 
 ## Setup
 

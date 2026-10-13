@@ -8,110 +8,99 @@ export interface Department {
   alternativeOffers?: string[]; // department ids that can be offered if preferred is missed
   transferDestinations?: string[]; // possible transfers after first year
   isNew2026?: boolean;
+  /** true when the department building shows up in OpenStreetMap data for the Nsukka campus */
+  verified?: boolean;
 }
 
+/**
+ * Only departments taught on the Nsukka campus are playable.
+ * Law, Medicine and Surgery, Dentistry, Accountancy and Nursing are not
+ * offered here (Enugu campus / Ituku-Ozalla teaching hospital), so they are removed.
+ */
 export const departments: Department[] = [
-  // Professional / highly competitive
-  { 
-    id: "medicine", 
-    name: "Medicine and Surgery", 
-    faculty: "Medical Sciences", 
-    competition: "very_high", 
-    campus: "Ituku-Ozalla",
-    isProfessional: true,
-    alternativeOffers: ["zoology", "science_education", "agricultural_extension", "crop_science", "animal_science"],
-    transferDestinations: ["medicine"]
+  // Professional / highly competitive (Nsukka)
+  {
+    id: "vet_medicine", name: "Veterinary Medicine", faculty: "Veterinary Medicine",
+    competition: "very_high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["animal_science", "zoology", "microbiology", "botany"],
+    transferDestinations: ["vet_medicine"],
   },
-  { 
-    id: "law", 
-    name: "Law", 
-    faculty: "Law", 
-    competition: "very_high", 
-    campus: "Enugu",
-    isProfessional: true,
-    alternativeOffers: ["english", "history", "philosophy", "political_science"],
-    transferDestinations: ["law"]
+  {
+    id: "pharmacy", name: "Pharmacy", faculty: "Pharmaceutical Sciences",
+    competition: "very_high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["biochemistry", "microbiology", "botany"],
   },
-  { 
-    id: "dentistry", 
-    name: "Dentistry", 
-    faculty: "Dentistry", 
-    competition: "very_high", 
-    campus: "Ituku-Ozalla",
-    isProfessional: true,
-    alternativeOffers: ["biochemistry", "zoology"],
-    transferDestinations: ["dentistry"]
-  },
-  { 
-    id: "vet_medicine", 
-    name: "Veterinary Medicine", 
-    faculty: "Veterinary Medicine", 
-    competition: "very_high", 
-    campus: "Nsukka",
-    isProfessional: true,
-    alternativeOffers: ["animal_science", "zoology"],
-    transferDestinations: ["vet_medicine"]
-  },
-  { 
-    id: "mechanical_eng", 
-    name: "Mechanical Engineering", 
-    faculty: "Engineering", 
-    competition: "high", 
-    campus: "Nsukka",
-    isProfessional: true,
+  {
+    id: "mechanical_eng", name: "Mechanical Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
     alternativeOffers: ["physics", "mathematics", "computer_science"],
-    transferDestinations: ["mechanical_eng"]
+    transferDestinations: ["mechanical_eng"],
   },
-  { 
-    id: "civil_eng", 
-    name: "Civil Engineering", 
-    faculty: "Engineering", 
-    competition: "high", 
-    campus: "Nsukka",
-    isProfessional: true,
+  {
+    id: "civil_eng", name: "Civil Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
     alternativeOffers: ["physics", "mathematics"],
-    transferDestinations: ["civil_eng"]
+    transferDestinations: ["civil_eng"],
   },
-  { 
-    id: "electrical_eng", 
-    name: "Electrical Engineering", 
-    faculty: "Engineering", 
-    competition: "high", 
-    campus: "Nsukka",
-    isProfessional: true,
+  {
+    id: "electrical_eng", name: "Electrical Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true,
     alternativeOffers: ["physics", "computer_science"],
-    transferDestinations: ["electrical_eng"]
+    transferDestinations: ["electrical_eng"],
   },
 
-  // Common alternatives
-  { id: "zoology", name: "Zoology and Environmental Biology", faculty: "Biological Sciences", competition: "medium", campus: "Nsukka", transferDestinations: ["medicine", "dentistry", "vet_medicine"] },
-  { id: "biochemistry", name: "Biochemistry", faculty: "Biological Sciences", competition: "medium", campus: "Nsukka" },
+  // Biological Sciences (the "medical-side" route: nobody gets Medicine at Nsukka)
+  { id: "zoology", name: "Zoology and Environmental Biology", faculty: "Biological Sciences", competition: "medium", campus: "Nsukka", verified: true, transferDestinations: ["vet_medicine"] },
+  { id: "botany", name: "Plant Science and Biotechnology", faculty: "Biological Sciences", competition: "medium", campus: "Nsukka" },
+  { id: "microbiology", name: "Microbiology (MCB)", faculty: "Biological Sciences", competition: "medium", campus: "Nsukka" },
+  { id: "biochemistry", name: "Biochemistry (BCH)", faculty: "Biological Sciences", competition: "medium", campus: "Nsukka" },
+
+  // Agriculture
   { id: "animal_science", name: "Animal Science", faculty: "Agriculture", competition: "low", campus: "Nsukka", transferDestinations: ["vet_medicine"] },
   { id: "crop_science", name: "Crop Science", faculty: "Agriculture", competition: "low", campus: "Nsukka" },
   { id: "agricultural_extension", name: "Agricultural Extension", faculty: "Agriculture", competition: "low", campus: "Nsukka" },
+
+  // Education
   { id: "science_education", name: "Science Education", faculty: "Education", competition: "low", campus: "Nsukka" },
-  { id: "english", name: "English and Literary Studies", faculty: "Arts", competition: "medium", campus: "Nsukka", transferDestinations: ["law"] },
-  { id: "history", name: "History and International Studies", faculty: "Arts", competition: "medium", campus: "Nsukka", transferDestinations: ["law"] },
-  { id: "philosophy", name: "Philosophy", faculty: "Social Sciences", competition: "medium", campus: "Nsukka", transferDestinations: ["law"] },
-  { id: "political_science", name: "Political Science", faculty: "Social Sciences", competition: "medium", campus: "Nsukka", transferDestinations: ["law"] },
+  { id: "library_science", name: "Library and Information Science", faculty: "Education", competition: "low", campus: "Nsukka", verified: true },
+
+  // Arts
+  { id: "english", name: "English and Literary Studies", faculty: "Arts", competition: "medium", campus: "Nsukka" },
+  { id: "history", name: "History and International Studies", faculty: "Arts", competition: "medium", campus: "Nsukka" },
+  { id: "mass_comm", name: "Mass Communication", faculty: "Arts", competition: "medium", campus: "Nsukka" },
+  { id: "religion_cultural", name: "Religion and Cultural Studies", faculty: "Arts", competition: "low", campus: "Nsukka" },
+  { id: "linguistics", name: "Linguistics, Igbo and Other Nigerian Languages", faculty: "Arts", competition: "low", campus: "Nsukka" },
+  { id: "theatre_film", name: "Theatre and Film Studies", faculty: "Arts", competition: "medium", campus: "Nsukka" },
+  { id: "fine_arts", name: "Fine and Applied Arts", faculty: "Arts", competition: "medium", campus: "Nsukka" },
+  { id: "music", name: "Music", faculty: "Arts", competition: "low", campus: "Nsukka" },
+
+  // Social Sciences
+  { id: "political_science", name: "Political Science", faculty: "Social Sciences", competition: "medium", campus: "Nsukka", verified: true },
+  { id: "economics", name: "Economics", faculty: "Social Sciences", competition: "medium", campus: "Nsukka", verified: true },
+  { id: "philosophy", name: "Philosophy", faculty: "Social Sciences", competition: "medium", campus: "Nsukka" },
+  { id: "sociology", name: "Sociology and Anthropology", faculty: "Social Sciences", competition: "medium", campus: "Nsukka" },
+  { id: "psychology", name: "Psychology", faculty: "Social Sciences", competition: "high", campus: "Nsukka" },
+  { id: "public_admin", name: "Public Administration and Local Government", faculty: "Social Sciences", competition: "medium", campus: "Nsukka", verified: true },
+  { id: "social_work", name: "Social Work", faculty: "Social Sciences", competition: "low", campus: "Nsukka" },
+  { id: "geography", name: "Geography", faculty: "Social Sciences", competition: "low", campus: "Nsukka" },
+
+  // Physical Sciences
   { id: "physics", name: "Physics and Astronomy", faculty: "Physical Sciences", competition: "medium", campus: "Nsukka", transferDestinations: ["mechanical_eng", "civil_eng", "electrical_eng"] },
   { id: "mathematics", name: "Mathematics", faculty: "Physical Sciences", competition: "medium", campus: "Nsukka", transferDestinations: ["mechanical_eng", "civil_eng"] },
   { id: "computer_science", name: "Computer Science", faculty: "Physical Sciences", competition: "high", campus: "Nsukka", transferDestinations: ["electrical_eng"] },
-
-  // Others
-  { id: "pharmacy", name: "Pharmacy", faculty: "Pharmaceutical Sciences", competition: "very_high", campus: "Nsukka", isProfessional: true },
-  { id: "nursing", name: "Nursing Science", faculty: "Health Sciences", competition: "high", campus: "Nsukka" },
-  { id: "economics", name: "Economics", faculty: "Social Sciences", competition: "medium", campus: "Nsukka" },
-  { id: "accounting", name: "Accountancy", faculty: "Business Administration", competition: "medium", campus: "Enugu" },
-  { id: "mass_comm", name: "Mass Communication", faculty: "Arts", competition: "medium", campus: "Nsukka" },
 ];
 
-export const getDepartmentById = (id: string) => departments.find(d => d.id === id);
+export const FACULTY_ORDER = [
+  "Arts", "Social Sciences", "Biological Sciences", "Physical Sciences", "Engineering",
+  "Agriculture", "Education", "Pharmaceutical Sciences", "Veterinary Medicine",
+];
+
+export const getDepartmentById = (id: string) => departments.find((d) => d.id === id);
 
 export const getAlternativesFor = (preferredId: string): Department[] => {
   const preferred = getDepartmentById(preferredId);
   if (!preferred?.alternativeOffers) return [];
   return preferred.alternativeOffers
-    .map(id => getDepartmentById(id))
+    .map((id) => getDepartmentById(id))
     .filter((d): d is Department => !!d);
 };

@@ -10,6 +10,7 @@ import PlaceSheet from "@/components/PlaceSheet";
 import PhonePanel from "@/components/PhonePanel";
 import HomePanel from "@/components/HomePanel";
 import BuyPanel from "@/components/BuyPanel";
+import CreateCharacter from "@/components/CreateCharacter";
 
 const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
 
@@ -66,6 +67,7 @@ export default function Home() {
   }, []);
 
   if (!mounted) return <main className="app" />;
+  if (s.gender === null) return <CreateCharacter onPick={s.setGender} />;
 
   const here: [number, number] = [s.position.lng, s.position.lat];
   const place = selectedId ? getPlace(selectedId) : undefined;
@@ -129,7 +131,7 @@ export default function Home() {
       {tab === "map" && place && (
         <PlaceSheet
           place={place} distance={dist} atPlace={atPlace} travelling={!!travel}
-          money={s.money} needs={s.needs} mode={mode} setMode={setMode}
+          money={s.money} needs={s.needs} allocatedHostel={s.allocatedHostel} mode={mode} setMode={setMode}
           onGo={go} onAction={act} onClose={() => setSelectedId(null)}
         />
       )}

@@ -11,6 +11,7 @@ interface Props {
   travelling: boolean;
   money: number;
   needs: Needs;
+  allocatedHostel: string | null;
   mode: ModeId;
   setMode: (m: ModeId) => void;
   onGo: () => void;
@@ -31,6 +32,7 @@ export default function PlaceSheet(p: Props) {
         <div>
           <h2>{p.place.name}</h2>
           <div className="sub">{p.place.kind}{p.atPlace ? " • You are here" : ` • ${Math.round(p.distance)} m away`}</div>
+          {p.place.wifi && <div className="wifi">📶 Free Wi-Fi hotspot</div>}
         </div>
       </div>
       <p className="blurb">{p.place.blurb}</p>
@@ -39,17 +41,19 @@ export default function PlaceSheet(p: Props) {
         {p.place.actions.map((a) => {
           const tooTired = (a.needs.energy ?? 0) < 0 && p.needs.energy < -(a.needs.energy ?? 0);
           const noCash = (a.cost ?? 0) > p.money;
-          const off = !p.atPlace || tooTired || noCash;
+          const notResident = !!a.residentOnly && p.allocatedHostel !== p.place.hostelId;
+          const off = !p.atPlace || tooTired || noCash || notResident;
           return (
             <button key={a.id} className="pill" disabled={off} onClick={() => p.onAction(a.id)}>
               {a.emoji} {a.label}
               {a.cost ? ` • ₦${a.cost.toLocaleString()}` : a.earn ? ` • +₦${a.earn.toLocaleString()}` : ""}
-              {tooTired ? " • too tired" : noCash ? " • no cash" : ""}
+              {notResident ? " • residents only" : tooTired ? " • too tired" : noCash ? " • no cash" : ""}
             </button>
           );
         })}
       </div>
-      {!p.atPlace && <div className="hint">Go there first to do things.</div>}
+      {p.place.actions.length === 0 && <div className="hint">Nothing to do here yet. More coming soon.</div>}
+      {!p.atPlace && p.place.actions.length > 0 && <div className="hint">Go there first to do things.</div>}
 
       {!p.atPlace && (
         <>

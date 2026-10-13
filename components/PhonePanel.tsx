@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePlayerStore } from "@/lib/playerStore";
-import { departments, getDepartmentById, getAlternativesFor } from "@/lib/departments";
+import { departments, FACULTY_ORDER, getDepartmentById, getAlternativesFor } from "@/lib/departments";
 import {
   getHostelById, getRandomRoommates, offCampusOptions, getDeterministicHostel, hasAvailableBed,
 } from "@/lib/hostels";
@@ -11,10 +11,10 @@ export default function PhonePanel({ onClose }: { onClose: () => void }) {
   const {
     preferredDepartment, offeredDepartment, enrolledDepartment, admissionStatus,
     setPreferredDepartment, receiveOffer, setNoOffer, acceptOffer, declineOffer,
-    canApply, getCooldownRemaining, hostelStatus, allocateHostel, chooseOffCampus,
+    canApply, getCooldownRemaining, hostelStatus, allocateHostel, chooseOffCampus, gender: playerGender,
   } = usePlayerStore();
   const [cooldown, setCooldown] = useState(0);
-  const gender: "boys" | "girls" = "boys";
+  const gender: "boys" | "girls" = playerGender ?? "boys";
 
   useEffect(() => {
     const t = setInterval(() => setCooldown(getCooldownRemaining()), 1000);
@@ -45,7 +45,7 @@ export default function PhonePanel({ onClose }: { onClose: () => void }) {
     if (!targetId) { allocateHostel(null, null, []); return; }
     if (hasAvailableBed(targetId)) {
       const h = getHostelById(targetId);
-      const mates = getRandomRoommates((h?.simulatedOccupancy || 4) - 1);
+      const mates = getRandomRoommates((h?.simulatedOccupancy || 4) - 1, gender);
       allocateHostel(targetId, `Room ${Math.floor(Math.random() * 40) + 1}`, mates);
     } else {
       allocateHostel(null, null, []); // full: no silent reassignment
@@ -72,15 +72,21 @@ export default function PhonePanel({ onClose }: { onClose: () => void }) {
           {showCourses && (
             <>
               <p className="blurb">Choose your preferred course. Outcomes: preferred, alternative, or no offer.</p>
-              {departments
-                .filter((d) => d.isProfessional || ["zoology", "computer_science", "economics"].includes(d.id))
-                .slice(0, 10)
-                .map((d) => (
-                  <button key={d.id} className="opt" disabled={!ok} onClick={() => applyForCourse(d.id)}>
-                    {d.name} {d.isProfessional && "⭐"}
-                    <small>{d.faculty} • {d.competition}</small>
-                  </button>
-                ))}
+              {FACULTY_ORDER.map((fac) => {
+                const list = departments.filter((d) => d.faculty === fac);
+                if (list.length === 0) return null;
+                return (
+                  <div key={fac}>
+                    <h4 className="fac">{fac}</h4>
+                    {list.map((d) => (
+                      <button key={d.id} className="opt" disabled={!ok} onClick={() => applyForCourse(d.id)}>
+                        {d.name} {d.isProfessional && "⭐"}
+                        <small>{d.competition.replace("_", " ")} competition</small>
+                      </button>
+                    ))}
+                  </div>
+                );
+              })}
             </>
           )}
           {admissionStatus === "offered" && offeredDepartment && (

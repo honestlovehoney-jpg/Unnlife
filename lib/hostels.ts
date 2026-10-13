@@ -1,6 +1,7 @@
 export interface Roommate {
   id: string;
   name: string;
+  gender: "boys" | "girls";
   personality: string;
   routine: string;
   department: string;
@@ -100,14 +101,34 @@ export const hostels: Hostel[] = [
 ];
 
 export const roommatePool: Roommate[] = [
-  { id: "r1", name: "Chidi", personality: "Serious jacko", routine: "Studies till late", department: "Computer Science", financialSituation: "managing", socialPreference: "introvert", goals: ["Graduate with good GPA"] },
-  { id: "r2", name: "Emeka", personality: "Noisy gist partner", routine: "Out most evenings", department: "Political Science", financialSituation: "broke", socialPreference: "extrovert", goals: ["Become SUG president"] },
-  { id: "r3", name: "Ada", personality: "Quiet and clean", routine: "Early to bed, early rise", department: "English", financialSituation: "comfortable", socialPreference: "introvert", goals: ["Read more novels"] },
-  { id: "r4", name: "Tunde", personality: "Hustler", routine: "Always on business calls", department: "Economics", financialSituation: "managing", socialPreference: "mixed", goals: ["Start a shuttle business"] },
-  { id: "r5", name: "Blessing", personality: "Gossip queen", routine: "Knows campus news first", department: "Mass Communication", financialSituation: "broke", socialPreference: "extrovert", goals: ["Build network"] },
-  { id: "r6", name: "Ike", personality: "Early-morning prayer warrior", routine: "Prays at 5am", department: "Zoology", financialSituation: "managing", socialPreference: "introvert", goals: ["Join fellowship leadership"] },
-  { id: "r7", name: "Kelechi", personality: "Gamer who never sleeps early", routine: "Gaming till 2am", department: "Electrical Engineering", financialSituation: "comfortable", socialPreference: "mixed", goals: ["Win campus tournament"] },
-  { id: "r8", name: "Ngozi", personality: "Always borrowing something", routine: "Social and helpful", department: "Accounting", financialSituation: "broke", socialPreference: "extrovert", goals: ["Save for next semester"] },
+  { id: "m1", name: "Chidi", gender: "boys", personality: "Serious jacko", routine: "Studies till late", department: "Computer Science", financialSituation: "managing", socialPreference: "introvert", goals: ["Graduate with good GPA"] },
+  { id: "m2", name: "Emeka", gender: "boys", personality: "Noisy gist partner", routine: "Out most evenings", department: "Political Science", financialSituation: "broke", socialPreference: "extrovert", goals: ["Become SUG president"] },
+  { id: "m3", name: "Tunde", gender: "boys", personality: "Hustler", routine: "Always on business calls", department: "Economics", financialSituation: "managing", socialPreference: "mixed", goals: ["Start a shuttle business"] },
+  { id: "m4", name: "Ike", gender: "boys", personality: "Early-morning prayer warrior", routine: "Prays at 5am", department: "Zoology and Environmental Biology", financialSituation: "managing", socialPreference: "introvert", goals: ["Join fellowship leadership"] },
+  { id: "m5", name: "Kelechi", gender: "boys", personality: "Gamer who never sleeps early", routine: "Gaming till 2am", department: "Electrical Engineering", financialSituation: "comfortable", socialPreference: "mixed", goals: ["Win campus tournament"] },
+  { id: "m6", name: "Obinna", gender: "boys", personality: "Always borrowing something", routine: "Social and helpful", department: "Mass Communication", financialSituation: "broke", socialPreference: "extrovert", goals: ["Save for next semester"] },
+  { id: "m7", name: "Chukwudi", gender: "boys", personality: "Quiet scholari", routine: "Reads in the library until it closes", department: "Biochemistry (BCH)", financialSituation: "managing", socialPreference: "introvert", goals: ["Finish with first class"] },
+  { id: "m8", name: "Somto", gender: "boys", personality: "Football fanatic", routine: "Never misses a match", department: "Public Administration and Local Government", financialSituation: "managing", socialPreference: "extrovert", goals: ["Captain the department team"] },
+  { id: "m9", name: "Uche", gender: "boys", personality: "Runs-runs guy", routine: "Always has a plan before exams", department: "Sociology and Anthropology", financialSituation: "broke", socialPreference: "mixed", goals: ["Stay out of trouble"] },
+  { id: "m10", name: "Ifeanyi", gender: "boys", personality: "Neat and orderly", routine: "Washes clothes every Saturday", department: "Civil Engineering", financialSituation: "comfortable", socialPreference: "introvert", goals: ["Land a good internship"] },
+  { id: "m11", name: "Nonso", gender: "boys", personality: "Music head", routine: "Plays beats on his speaker", department: "Music", financialSituation: "managing", socialPreference: "extrovert", goals: ["Perform at Students' Week"] },
+  { id: "m12", name: "Kosi", gender: "boys", personality: "Jokes non-stop", routine: "Wakes everyone with gist", department: "Theatre and Film Studies", financialSituation: "broke", socialPreference: "extrovert", goals: ["Act in a campus play"] },
+  { id: "m13", name: "Dubem", gender: "boys", personality: "Calm and helpful", routine: "Cooks for the room on Sundays", department: "Microbiology (MCB)", financialSituation: "managing", socialPreference: "mixed", goals: ["Get an internship in a lab"] },
+  { id: "m14", name: "Arinze", gender: "boys", personality: "Class rep material", routine: "Knows every timetable change", department: "Philosophy", financialSituation: "comfortable", socialPreference: "extrovert", goals: ["Become class rep"] },
+  { id: "f1", name: "Ada", gender: "girls", personality: "Quiet and clean", routine: "Early to bed, early rise", department: "English and Literary Studies", financialSituation: "comfortable", socialPreference: "introvert", goals: ["Read more novels"] },
+  { id: "f2", name: "Blessing", gender: "girls", personality: "Gossip queen", routine: "Knows campus news first", department: "Mass Communication", financialSituation: "broke", socialPreference: "extrovert", goals: ["Build network"] },
+  { id: "f3", name: "Ngozi", gender: "girls", personality: "Always borrowing something", routine: "Social and helpful", department: "Economics", financialSituation: "broke", socialPreference: "extrovert", goals: ["Save for next semester"] },
+  { id: "f4", name: "Chiamaka", gender: "girls", personality: "Serious jacko", routine: "Reads from dawn", department: "Psychology", financialSituation: "managing", socialPreference: "introvert", goals: ["Graduate with good GPA"] },
+  { id: "f5", name: "Oluchi", gender: "girls", personality: "Fashion plug", routine: "Sells small things in the hostel", department: "Fine and Applied Arts", financialSituation: "managing", socialPreference: "extrovert", goals: ["Start a clothing brand"] },
+  { id: "f6", name: "Amara", gender: "girls", personality: "Fellowship sister", routine: "Prays before sleeping", department: "Religion and Cultural Studies", financialSituation: "managing", socialPreference: "mixed", goals: ["Lead the choir"] },
+  { id: "f7", name: "Ifunanya", gender: "girls", personality: "Neat freak", routine: "Cleans the room every morning", department: "Plant Science and Biotechnology", financialSituation: "comfortable", socialPreference: "introvert", goals: ["Win a research prize"] },
+  { id: "f8", name: "Nkechi", gender: "girls", personality: "Hustler", routine: "Always on phone with customers", department: "Public Administration and Local Government", financialSituation: "managing", socialPreference: "mixed", goals: ["Open a small shop"] },
+  { id: "f9", name: "Ugo", gender: "girls", personality: "Loves good food", routine: "Knows every cheap food spot", department: "Library and Information Science", financialSituation: "broke", socialPreference: "extrovert", goals: ["Eat well on a budget"] },
+  { id: "f10", name: "Adaeze", gender: "girls", personality: "Night reader", routine: "Sleeps late, wakes late", department: "History and International Studies", financialSituation: "managing", socialPreference: "introvert", goals: ["Write a book"] },
+  { id: "f11", name: "Chinenye", gender: "girls", personality: "Class rep energy", routine: "Organises every group", department: "Political Science", financialSituation: "comfortable", socialPreference: "extrovert", goals: ["Win a faculty post"] },
+  { id: "f12", name: "Kamsi", gender: "girls", personality: "Easy-going", routine: "Joins every hostel gist", department: "Sociology and Anthropology", financialSituation: "broke", socialPreference: "extrovert", goals: ["Make lifelong friends"] },
+  { id: "f13", name: "Ebere", gender: "girls", personality: "Calm and focused", routine: "Studies in the library", department: "Linguistics, Igbo and Other Nigerian Languages", financialSituation: "managing", socialPreference: "introvert", goals: ["Teach one day"] },
+  { id: "f14", name: "Ogechi", gender: "girls", personality: "Dance lover", routine: "Practices steps at night", department: "Theatre and Film Studies", financialSituation: "managing", socialPreference: "extrovert", goals: ["Dance at Bonfire Night"] },
 ];
 
 export const offCampusOptions: OffCampusOption[] = [
@@ -168,7 +189,9 @@ export const getHostelsByType = (type: "boys" | "girls") => hostels.filter((h) =
 
 export const getHostelById = (id: string) => hostels.find((h) => h.id === id);
 
-export const getRandomRoommates = (count: number): Roommate[] => {
-  const shuffled = [...roommatePool].sort(() => 0.5 - Math.random());
-  return shuffled.slice(0, count);
+/** Roommates always match the player's gender: boys and girls are never mixed. */
+export const getRandomRoommates = (count: number, gender: "boys" | "girls"): Roommate[] => {
+  const pool = roommatePool.filter((r) => r.gender === gender);
+  const shuffled = [...pool].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, Math.min(count, pool.length));
 };

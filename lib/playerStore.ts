@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { departments } from "./departments";
 import { Roommate } from "./hostels";
 
 export interface Needs {
@@ -32,6 +33,7 @@ interface PlayerState {
   nextApplicationAt: number | null;
   year: number;
   gameMinutes: number; // minutes since Day 1, 00:00
+  gender: "boys" | "girls" | null;
 
   // Hostel / Accommodation
   preferredHostel: string | null;
@@ -43,6 +45,7 @@ interface PlayerState {
   offCampusId: string | null;
 
   setPosition: (lng: number, lat: number) => void;
+  setGender: (g: "boys" | "girls") => void;
   applyEffect: (e: Effect) => boolean;
   tick: () => void;
   spend: (amount: number) => void;
@@ -65,7 +68,7 @@ export const usePlayerStore = create<PlayerState>()(
     (set, get) => ({
       money: 25000,
       needs: { hunger: 80, energy: 70, fun: 60, social: 50 },
-      position: { lng: 7.407, lat: 6.87 }, // Shuttle Park: you arrive by shuttle
+      position: { lng: 7.408339, lat: 6.864178 }, // starts at the Nnamdi Azikiwe Library
       preferredDepartment: null,
       offeredDepartment: null,
       enrolledDepartment: null,
@@ -74,6 +77,7 @@ export const usePlayerStore = create<PlayerState>()(
       nextApplicationAt: null,
       year: 1,
       gameMinutes: 8 * 60,
+      gender: null,
 
       preferredHostel: null,
       allocatedHostel: null,
@@ -84,6 +88,7 @@ export const usePlayerStore = create<PlayerState>()(
       offCampusId: null,
 
       setPosition: (lng, lat) => set({ position: { lng, lat } }),
+      setGender: (g) => set({ gender: g }),
       applyEffect: (e) => {
         const s = get();
         const cost = e.cost ?? 0;
@@ -164,6 +169,35 @@ export const usePlayerStore = create<PlayerState>()(
     }),
     {
       name: "unn-life-player",
+      version: 2,
+      // v2: gender added, courses limited to Nsukka, roommates gender-matched, real campus coordinates
+      migrate: (persisted: unknown) => {
+        const st = (persisted ?? {}) as Record<string, unknown>;
+        const valid = new Set(departments.map((d) => d.id));
+        const ids = [st.enrolledDepartment, st.preferredDepartment, st.offeredDepartment].filter(
+          (x): x is string => typeof x === "string"
+        );
+        const badCourse = ids.some((id) => !valid.has(id));
+        const next: Record<string, unknown> = {
+          ...st,
+          gender: null,
+          roommates: [],
+          position: { lng: 7.408339, lat: 6.864178 },
+        };
+        if (badCourse) {
+          Object.assign(next, {
+            admissionStatus: "none", enrolledDepartment: null, preferredDepartment: null,
+            offeredDepartment: null, declinedAt: null, nextApplicationAt: null,
+          });
+        }
+        if (badCourse || st.hostelStatus !== "off_campus") {
+          Object.assign(next, {
+            allocatedHostel: null, roomNumber: null, hostelStatus: "none", accommodationType: null,
+            preferredHostel: null,
+          });
+        }
+        return next as never;
+      },
     }
   )
 );

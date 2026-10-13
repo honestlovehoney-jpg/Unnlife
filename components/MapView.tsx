@@ -21,43 +21,66 @@ interface Props {
   onArrive: () => void;
 }
 
-function styleUp(m: maplibregl.Map) {
+// zoom levels at which each tier of place chips appears / shows its name
+const MIN_ZOOM: Record<1 | 2 | 3, number> = { 1: 14.5, 2: 16.3, 3: 17.2 };
+const LABEL_ZOOM: Record<1 | 2 | 3, number> = { 1: 16.2, 2: 17.2, 3: 17.6 };
+
+/** Replace the stock map buildings with the real UNN campus outlines (OpenStreetMap data). */
+function addCampus(m: maplibregl.Map) {
   try {
     const style = m.getStyle();
     if (!style || !style.layers) return;
-    // Declutter: hide the default POI / house-number / shield labels
     for (const l of style.layers) {
-      if (l.type === "symbol" && /poi|housenumber|shield|aerodrome|airport/i.test(l.id)) {
+      const sourceLayer = (l as any)["source-layer"] as string | undefined;
+      const hideLabel = l.type === "symbol" && /poi|housenumber|shield|aerodrome|airport/i.test(l.id);
+      if (sourceLayer === "building" || hideLabel) {
         m.setLayoutProperty(l.id, "visibility", "none");
       }
     }
-    const color: any = [
-      "interpolate", ["linear"], ["coalesce", ["get", "render_height"], 6],
-      0, "#efe6d6", 40, "#d9cdb6", 120, "#c4b69b",
-    ];
-    if (m.getLayer("building-3d")) {
-      m.setPaintProperty("building-3d", "fill-extrusion-color", color);
-      m.setPaintProperty("building-3d", "fill-extrusion-opacity", 0.95);
-    } else {
-      const src = Object.entries(style.sources).find(([, s]) => s.type === "vector")?.[0];
-      if (src) {
-        m.addLayer({
-          id: "unn-buildings-3d",
-          type: "fill-extrusion",
-          source: src,
-          "source-layer": "building",
-          minzoom: 14,
-          paint: {
-            "fill-extrusion-color": color,
-            "fill-extrusion-height": ["coalesce", ["get", "render_height"], 6],
-            "fill-extrusion-base": ["coalesce", ["get", "render_min_height"], 0],
-            "fill-extrusion-opacity": 0.95,
-          },
-        } as any);
-      }
+    const before = style.layers.find((l) => l.type === "symbol")?.id;
+    if (!m.getSource("campus")) {
+      m.addSource("campus", { type: "geojson", data: new URL("/data/campus.geojson", window.location.origin).toString() });
     }
+    m.addLayer(
+      {
+        id: "campus-leisure",
+        type: "fill",
+        source: "campus",
+        filter: ["==", ["get", "t"], "l"],
+        paint: {
+          "fill-color": ["match", ["get", "k"], "pitch", "#9fcf9a", "stadium", "#b6d9a8", "pool", "#7cc4e8", "park", "#cfe5c0", "#cfe5c0"],
+          "fill-opacity": 0.92,
+        },
+      } as any,
+      before
+    );
+    m.addLayer(
+      {
+        id: "campus-leisure-line",
+        type: "line",
+        source: "campus",
+        filter: ["==", ["get", "t"], "l"],
+        paint: { "line-color": "#ffffff", "line-width": 1.2, "line-opacity": 0.9 },
+      } as any,
+      before
+    );
+    m.addLayer(
+      {
+        id: "campus-buildings",
+        type: "fill-extrusion",
+        source: "campus",
+        filter: ["==", ["get", "t"], "b"],
+        paint: {
+          "fill-extrusion-color": ["get", "c"],
+          "fill-extrusion-height": ["get", "h"],
+          "fill-extrusion-base": 0,
+          "fill-extrusion-opacity": 0.94,
+        },
+      } as any,
+      before
+    );
   } catch (err) {
-    console.warn("map styling skipped", err);
+    console.warn("campus layers skipped", err);
   }
 }
 
@@ -66,6 +89,7 @@ export default function MapView({ position, travel, selectedId, onSelect, onArri
   const map = useRef<maplibregl.Map | null>(null);
   const chips = useRef<Record<string, HTMLDivElement>>({});
   const player = useRef<maplibregl.Marker | null>(null);
+  const refresh = useRef<() => void>(() => {});
   const onSelectRef = useRef(onSelect);
   const onArriveRef = useRef(onArrive);
   onSelectRef.current = onSelect;
@@ -80,9 +104,10 @@ export default function MapView({ position, travel, selectedId, onSelect, onArri
       container: container.current,
       style: "https://tiles.openfreemap.org/styles/liberty",
       center: [startPos.current.lng, startPos.current.lat],
-      zoom: 16.2,
+      zoom: 16.4,
       pitch: 55,
       bearing: -20,
+      minZoom: 13,
       maxPitch: 70,
     });
     map.current = m;
@@ -91,7 +116,14 @@ export default function MapView({ position, travel, selectedId, onSelect, onArri
     places.forEach((p) => {
       const el = document.createElement("div");
       el.className = "chip";
-      el.innerHTML = `<span class="chip-e">${p.emoji}</span><span>${p.name}</span>`;
+      const e = document.createElement("span");
+      e.className = "chip-e";
+      e.textContent = p.emoji;
+      const l = document.createElement("span");
+      l.className = "chip-l";
+      l.textContent = p.name;
+      el.appendChild(e);
+      el.appendChild(l);
       el.addEventListener("click", (ev) => {
         ev.stopPropagation();
         onSelectRef.current(p.id);
@@ -107,8 +139,23 @@ export default function MapView({ position, travel, selectedId, onSelect, onArri
       .setLngLat([startPos.current.lng, startPos.current.lat])
       .addTo(m);
 
+    refresh.current = () => {
+      const z = m.getZoom();
+      for (const p of places) {
+        const el = chips.current[p.id];
+        if (!el) continue;
+        const sel = el.classList.contains("sel");
+        el.style.display = sel || z >= MIN_ZOOM[p.tier] ? "flex" : "none";
+        el.classList.toggle("lab", sel || z >= LABEL_ZOOM[p.tier]);
+      }
+    };
+    m.on("zoom", () => refresh.current());
     m.on("click", () => onSelectRef.current(null));
-    m.on("load", () => styleUp(m));
+    m.on("load", () => {
+      addCampus(m);
+      refresh.current();
+    });
+    refresh.current();
 
     return () => {
       m.remove();
@@ -120,6 +167,7 @@ export default function MapView({ position, travel, selectedId, onSelect, onArri
   // highlight + focus the selected place
   useEffect(() => {
     Object.entries(chips.current).forEach(([id, el]) => el.classList.toggle("sel", id === selectedId));
+    refresh.current();
     const m = map.current;
     if (!m) return;
     const none = { top: 0, bottom: 0, left: 0, right: 0 };
