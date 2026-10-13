@@ -163,3 +163,12 @@ export function hasAvailableBed(hostelId: string): boolean {
   const h = hostels.find(x => x.id === hostelId);
   return !!h && h.occupiedBeds < h.totalBeds;
 }
+
+export const getHostelsByType = (type: "boys" | "girls") => hostels.filter((h) => h.type === type);
+
+export const getHostelById = (id: string) => hostels.find((h) => h.id === id);
+
+export const getRandomRoommates = (count: number): Roommate[] => {
+  const shuffled = [...roommatePool].sort(() => 0.5 - Math.random());
+  return shuffled.slice(0, count);
+};
