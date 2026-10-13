@@ -151,5 +151,11 @@ export default function MapView({ position, travel, selectedId, onSelect, onArri
     return () => cancelAnimationFrame(raf);
   }, [travel]);
 
-  return <div ref={container} className="map" />;
+  return (
+    <div
+      ref={container}
+      className="map"
+      style={{ position: "absolute", top: 0, right: 0, bottom: 0, left: 0, width: "100%", height: "100%" }}
+    />
+  );
 }
