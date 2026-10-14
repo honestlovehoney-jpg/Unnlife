@@ -30,6 +30,13 @@ export const departments: Department[] = [
     competition: "very_high", campus: "Nsukka", isProfessional: true, verified: true,
     alternativeOffers: ["biochemistry", "microbiology", "botany"],
   },
+  // Engineering: the 11 departments on the Faculty of Engineering signboard
+  {
+    id: "chemical_eng", name: "Chemical Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["chemical_eng"],
+  },
   {
     id: "mechanical_eng", name: "Mechanical Engineering", faculty: "Engineering",
     competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
@@ -37,16 +44,58 @@ export const departments: Department[] = [
     transferDestinations: ["mechanical_eng"],
   },
   {
+    id: "materials_eng", name: "Materials and Metallurgical Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["materials_eng"],
+  },
+  {
+    id: "electrical_eng", name: "Electrical Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["electrical_eng"],
+  },
+  {
+    id: "electronic_eng", name: "Electronic and Computer Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["electronic_eng"],
+  },
+  {
+    id: "biomedical_eng", name: "Biomedical Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["biomedical_eng"],
+  },
+  {
+    id: "agric_eng", name: "Agricultural and Bioresources Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["agric_eng"],
+  },
+  {
+    id: "nuclear_eng", name: "Nuclear Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["nuclear_eng"],
+  },
+  {
+    id: "automotive_eng", name: "Automotive Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["automotive_eng"],
+  },
+  {
+    id: "mechatronic_eng", name: "Mechatronic Engineering", faculty: "Engineering",
+    competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
+    alternativeOffers: ["physics", "mathematics", "computer_science"],
+    transferDestinations: ["mechatronic_eng"],
+  },
+  {
     id: "civil_eng", name: "Civil Engineering", faculty: "Engineering",
     competition: "high", campus: "Nsukka", isProfessional: true, verified: true,
     alternativeOffers: ["physics", "mathematics"],
     transferDestinations: ["civil_eng"],
-  },
-  {
-    id: "electrical_eng", name: "Electrical Engineering", faculty: "Engineering",
-    competition: "high", campus: "Nsukka", isProfessional: true,
-    alternativeOffers: ["physics", "computer_science"],
-    transferDestinations: ["electrical_eng"],
   },
 
   // Biological Sciences (the "medical-side" route: nobody gets Medicine at Nsukka)

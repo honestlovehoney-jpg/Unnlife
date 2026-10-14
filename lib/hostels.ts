@@ -22,6 +22,8 @@ export interface Hostel {
   shopsNearby: string[];
   rumours: string[];
   isPresidential?: boolean;
+  /** has a real position on the map; hostels without one cannot be allocated yet */
+  located: boolean;
 }
 
 export interface OffCampusOption {
@@ -36,6 +38,11 @@ export interface OffCampusOption {
   privacy: "low" | "medium" | "high";
 }
 
+/*
+ * The 15 UNN hostels: 2 boys, 13 girls (campus account of the full list).
+ * Bed counts and rumours are GAMEPLAY DESIGN, not campus facts.
+ * Okpara and Tetfund still need a real map position, so they are not allocatable yet.
+ */
 export const hostels: Hostel[] = [
   {
     id: "alvan_ikoku",
@@ -46,8 +53,9 @@ export const hostels: Hostel[] = [
     simulatedOccupancy: 6,
     totalBeds: 200,
     occupiedBeds: 180,
-    shopsNearby: ["Okpa container", "Suya spot", "Water seller"],
+    shopsNearby: ["Provision shop", "Water seller"],
     rumours: ["Always noisy after 10pm", "Good for early morning hustle", "Sometimes power issues"],
+    located: true,
   },
   {
     id: "eni_njoku",
@@ -58,45 +66,179 @@ export const hostels: Hostel[] = [
     simulatedOccupancy: 7,
     totalBeds: 200,
     occupiedBeds: 190,
-    shopsNearby: ["Container", "Provision shop"],
+    shopsNearby: ["Provision shop", "Water seller"],
     rumours: ["Roommates sometimes share space tightly", "Serious readers live here"],
+    located: true,
   },
   {
     id: "presidential",
     name: "Presidential Hostel",
     type: "girls",
-    location: "Nsukka Campus",
+    location: "Hiltop Gate Rd",
     officialCapacityPerRoom: 10,
     simulatedOccupancy: 12,
     totalBeds: 80,
     occupiedBeds: 70,
-    shopsNearby: ["Boutique", "Food spot"],
+    shopsNearby: ["Green Diner", "Boutique"],
     rumours: ["Hardest to get", "More privacy", "Higher vibe"],
+    located: true,
     isPresidential: true,
   },
   {
     id: "bello",
-    name: "Bello Hostel",
+    name: "Bello Hall",
     type: "girls",
-    location: "Nsukka Campus",
+    location: "Hiltop Gate Rd",
     officialCapacityPerRoom: 4,
     simulatedOccupancy: 6,
     totalBeds: 150,
     occupiedBeds: 140,
     shopsNearby: ["Provision store"],
     rumours: ["Pharmacy students common here"],
+    located: true,
+  },
+  {
+    id: "eyo_ita",
+    name: "Eyo-ita Hostel",
+    type: "girls",
+    location: "Hiltop Gate Rd",
+    officialCapacityPerRoom: 4,
+    simulatedOccupancy: 6,
+    totalBeds: 140,
+    occupiedBeds: 120,
+    shopsNearby: ["Tech edge phone shop", "Provision store"],
+    rumours: ["Joined to Bello Hall by one long block"],
+    located: true,
   },
   {
     id: "mary_slessor",
     name: "Mary Slessor Hall",
     type: "girls",
-    location: "Nsukka Campus",
+    location: "Convocation Ave",
     officialCapacityPerRoom: 4,
     simulatedOccupancy: 6,
     totalBeds: 120,
     occupiedBeds: 100,
     shopsNearby: ["Provision store", "Hair shop"],
     rumours: ["Strict visitors policy in the evening", "Nice view of campus"],
+    located: true,
+  },
+  {
+    id: "awolowo",
+    name: "Awolowo Hostel (Aja Nwachukwu)",
+    type: "girls",
+    location: "Hiltop Gate Rd",
+    officialCapacityPerRoom: 6,
+    simulatedOccupancy: 8,
+    totalBeds: 180,
+    occupiedBeds: 150,
+    shopsNearby: ["OGB cool spot", "Food stalls"],
+    rumours: ["Food stalls right at the door", "Long corridors, long queues for water"],
+    located: true,
+  },
+  {
+    id: "akintola",
+    name: "Akintola Hall",
+    type: "girls",
+    location: "James Africanus Norton Rd",
+    officialCapacityPerRoom: 6,
+    simulatedOccupancy: 8,
+    totalBeds: 110,
+    occupiedBeds: 90,
+    shopsNearby: ["Green Diner", "Medical Centre"],
+    rumours: ["Close to the Medical Centre"],
+    located: true,
+  },
+  {
+    id: "akpabio",
+    name: "Akpabio Hall",
+    type: "girls",
+    location: "James Africanus Norton Rd",
+    officialCapacityPerRoom: 6,
+    simulatedOccupancy: 8,
+    totalBeds: 110,
+    occupiedBeds: 95,
+    shopsNearby: ["Green Diner", "Medical Centre"],
+    rumours: ["Close to the Medical Centre"],
+    located: true,
+  },
+  {
+    id: "balewa",
+    name: "Balewa Hostel",
+    type: "girls",
+    location: "Nsukka Campus",
+    officialCapacityPerRoom: 4,
+    simulatedOccupancy: 6,
+    totalBeds: 150,
+    occupiedBeds: 130,
+    shopsNearby: ["Provision store"],
+    rumours: ["Near the Faculty of Education"],
+    located: true,
+  },
+  {
+    id: "okeke",
+    name: "Okeke Hostel",
+    type: "girls",
+    location: "James Africanus Norton Rd",
+    officialCapacityPerRoom: 4,
+    simulatedOccupancy: 6,
+    totalBeds: 130,
+    occupiedBeds: 110,
+    shopsNearby: ["Fidelity Bank", "Fresh unisex salon"],
+    rumours: ["Close to the banks"],
+    located: true,
+  },
+  {
+    id: "isa_kaita",
+    name: "Isa Kaita Hostel",
+    type: "girls",
+    location: "James Africanus Norton Rd",
+    officialCapacityPerRoom: 4,
+    simulatedOccupancy: 6,
+    totalBeds: 130,
+    occupiedBeds: 115,
+    shopsNearby: ["Fidelity Bank", "UBA Hall of Fame"],
+    rumours: ["Close to the banks"],
+    located: true,
+  },
+  {
+    id: "kwame_nkrumah",
+    name: "Kwame Nkrumah Hostel",
+    type: "girls",
+    location: "Nsukka Campus",
+    officialCapacityPerRoom: 4,
+    simulatedOccupancy: 7,
+    totalBeds: 160,
+    occupiedBeds: 140,
+    shopsNearby: ["Provision store"],
+    rumours: ["Wide field in front, windy evenings"],
+    located: true,
+  },
+  {
+    id: "okpara",
+    name: "Okpara Hostel",
+    type: "girls",
+    location: "Nsukka Campus",
+    officialCapacityPerRoom: 6,
+    simulatedOccupancy: 8,
+    totalBeds: 120,
+    occupiedBeds: 100,
+    shopsNearby: ["Provision store"],
+    rumours: ["Position still to be confirmed"],
+    located: false,
+  },
+  {
+    id: "tetfund_girls",
+    name: "Tetfund Girls Hostel",
+    type: "girls",
+    location: "Behind Okeke and Bello",
+    officialCapacityPerRoom: 4,
+    simulatedOccupancy: 5,
+    totalBeds: 240,
+    occupiedBeds: 160,
+    shopsNearby: ["Provision store"],
+    rumours: ["Newest hostel on campus"],
+    located: false,
   },
 ];
 
@@ -139,6 +281,12 @@ export const offCampusOptions: OffCampusOption[] = [
   { id: "premium_3bed", name: "Premium 3-Bedroom Apartment", type: "three_bedroom", monthlyRent: 110000, deposit: 110000, travelTimeMinutes: 20, description: "More space, housemates optional", utilities: "Generator backup", privacy: "high" },
 ];
 
+const hash = (str: string) => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  return h;
+};
+
 export function getDeterministicHostel(
   gender: "boys" | "girls",
   departmentId: string | null,
@@ -146,38 +294,33 @@ export function getDeterministicHostel(
 ): string | null {
   if (!departmentId) return null;
 
-  // Female first-year medical / health sciences → Presidential
+  // Female first-year medical / health sciences go to Presidential (those courses are not offered on this campus yet)
   const femaleFirstYearMedical = [
     "medicine", "dentistry", "anatomy", "physiology", "radiography",
-    "nursing", "mls", "medical_rehab"
+    "nursing", "mls", "medical_rehab",
   ];
   if (gender === "girls" && year === 1 && femaleFirstYearMedical.includes(departmentId)) {
     return "presidential";
   }
 
-  // Female Pharmacy → Bello (all years for now)
+  // Female Pharmacy goes to Bello (all years for now)
   if (gender === "girls" && departmentId === "pharmacy") {
     return "bello";
   }
 
-  // Male first-year Medicine → Alvan Ikoku
-  if (gender === "boys" && year === 1 && departmentId === "medicine") {
-    return "alvan_ikoku";
-  }
-
-  // Other males → eligible male hostels (prefer Alvan if space, else Eni)
+  // Boys (only two hostels): spread by department, and use the other one if the first is full
   if (gender === "boys") {
-    const alvan = hostels.find(h => h.id === "alvan_ikoku");
-    if (alvan && alvan.occupiedBeds < alvan.totalBeds) return "alvan_ikoku";
-    return "eni_njoku";
+    const first = hash(departmentId + ":" + year) % 2 === 0 ? "alvan_ikoku" : "eni_njoku";
+    const other = first === "alvan_ikoku" ? "eni_njoku" : "alvan_ikoku";
+    const pick = hostels.find((h) => h.id === first);
+    if (pick && pick.occupiedBeds < pick.totalBeds) return first;
+    return other;
   }
 
-  // Other females → Mary Slessor as default fallback (configurable later)
-  if (gender === "girls") {
-    return "mary_slessor";
-  }
-
-  return null;
+  // Other girls: spread over the girls hostels that have a real map position
+  const pool = hostels.filter((h) => h.type === "girls" && h.located && h.id !== "presidential");
+  if (pool.length === 0) return null;
+  return pool[hash(departmentId + ":" + year) % pool.length].id;
 }
 
 export function hasAvailableBed(hostelId: string): boolean {

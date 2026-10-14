@@ -151,3 +151,13 @@ h4.fac { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; colo
 }
 .create-row button span { font-size: 40px; }
 .create-row button:active { border-color: #16a34a; background: #f0fdf4; }
+
+/* ---- map sky and day/night ---- */
+.app .map { background: linear-gradient(#a9d6f5 0%, #dff1fc 46%, #eaf6ff 100%); }
+.app .map.dusk { background: linear-gradient(#f2a56b 0%, #f6cfa5 46%, #f9e2c8 100%); }
+.app .map.night { background: linear-gradient(#0a1030 0%, #1a2756 55%, #26356b 100%); }
+.maplibregl-canvas { transition: filter 1.5s; }
+.map.dusk .maplibregl-canvas { filter: brightness(.86) sepia(.28) saturate(1.15) hue-rotate(-8deg); }
+.map.night .maplibregl-canvas { filter: brightness(.46) saturate(.8) contrast(1.08) hue-rotate(8deg); }
+.chip { font-size: 12px; }
+.chip .chip-e { font-size: 17px; width: 26px; height: 26px; }

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { departments } from "./departments";
-import { Roommate } from "./hostels";
+import { Roommate, hostels } from "./hostels";
 
 export interface Needs {
   hunger: number;
@@ -169,31 +169,48 @@ export const usePlayerStore = create<PlayerState>()(
     }),
     {
       name: "unn-life-player",
-      version: 2,
+      version: 3,
       // v2: gender added, courses limited to Nsukka, roommates gender-matched, real campus coordinates
-      migrate: (persisted: unknown) => {
+      // v3: the real 15 hostels; an allocation to a hostel that no longer exists or is not on the map is cleared
+      migrate: (persisted: unknown, version: number) => {
         const st = (persisted ?? {}) as Record<string, unknown>;
-        const valid = new Set(departments.map((d) => d.id));
-        const ids = [st.enrolledDepartment, st.preferredDepartment, st.offeredDepartment].filter(
-          (x): x is string => typeof x === "string"
-        );
-        const badCourse = ids.some((id) => !valid.has(id));
-        const next: Record<string, unknown> = {
-          ...st,
-          gender: null,
-          roommates: [],
-          position: { lng: 7.408339, lat: 6.864178 },
-        };
-        if (badCourse) {
+        const next: Record<string, unknown> = { ...st };
+        if (version < 2) {
+          const valid = new Set(departments.map((d) => d.id));
+          const ids = [st.enrolledDepartment, st.preferredDepartment, st.offeredDepartment].filter(
+            (x): x is string => typeof x === "string"
+          );
+          const badCourse = ids.some((id) => !valid.has(id));
+          Object.assign(next, { gender: null, roommates: [], position: { lng: 7.408339, lat: 6.864178 } });
+          if (badCourse) {
+            Object.assign(next, {
+              admissionStatus: "none", enrolledDepartment: null, preferredDepartment: null,
+              offeredDepartment: null, declinedAt: null, nextApplicationAt: null,
+            });
+          }
+          if (badCourse || st.hostelStatus !== "off_campus") {
+            Object.assign(next, {
+              allocatedHostel: null, roomNumber: null, hostelStatus: "none", accommodationType: null,
+              preferredHostel: null,
+            });
+          }
+        }
+        // any version: drop an allocation that points at a hostel that is missing or has no map position
+        const hid = next.allocatedHostel;
+        const ok = typeof hid === "string" && hostels.some((h) => h.id === hid && h.located);
+        if (typeof hid === "string" && !ok) {
+          Object.assign(next, {
+            allocatedHostel: null, roomNumber: null, roommates: [], hostelStatus: "none",
+            accommodationType: null, preferredHostel: null,
+          });
+        }
+        // courses that no longer exist (engineering ids were extended, others unchanged)
+        const valid2 = new Set(departments.map((d) => d.id));
+        const dep = next.enrolledDepartment;
+        if (typeof dep === "string" && !valid2.has(dep)) {
           Object.assign(next, {
             admissionStatus: "none", enrolledDepartment: null, preferredDepartment: null,
             offeredDepartment: null, declinedAt: null, nextApplicationAt: null,
-          });
-        }
-        if (badCourse || st.hostelStatus !== "off_campus") {
-          Object.assign(next, {
-            allocatedHostel: null, roomNumber: null, hostelStatus: "none", accommodationType: null,
-            preferredHostel: null,
           });
         }
         return next as never;

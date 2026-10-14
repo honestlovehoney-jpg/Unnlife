@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePlayerStore } from "@/lib/playerStore";
 import { getPlace, streetItems } from "@/lib/places";
-import { AT_PLACE_M, MODES, clockLabel, distanceM, quote, type ModeId } from "@/lib/travel";
+import { AT_PLACE_M, MODES, clockLabel, dayPhase, distanceM, quote, type ModeId } from "@/lib/travel";
 import type { TravelState } from "@/components/MapView";
 import PlaceSheet from "@/components/PlaceSheet";
 import PhonePanel from "@/components/PhonePanel";
@@ -113,7 +113,7 @@ export default function Home() {
 
   return (
     <main className="app">
-      <MapView position={s.position} travel={travel} selectedId={selectedId} onSelect={select} onArrive={onArrive} />
+      <MapView position={s.position} travel={travel} selectedId={selectedId} onSelect={select} onArrive={onArrive} phase={dayPhase(s.gameMinutes)} />
 
       <div className="topbar">
         <span>☀️ {clock.time}</span>

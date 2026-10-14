@@ -55,3 +55,12 @@ export function clockLabel(gameMinutes: number) {
     weather: night ? "🌙 Night" : h24 < 11 ? "🌤️ Morning" : h24 < 16 ? "☀️ Sunny" : "🌇 Evening",
   };
 }
+
+export type DayPhase = "day" | "dusk" | "night";
+
+export function dayPhase(gameMinutes: number): DayPhase {
+  const h = Math.floor((gameMinutes % 1440) / 60);
+  if (h < 6 || h >= 19) return "night";
+  if (h === 6 || h === 18) return "dusk";
+  return "day";
+}

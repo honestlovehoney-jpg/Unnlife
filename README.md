@@ -2,6 +2,28 @@
 
 Browser-based student life simulation set on the University of Nigeria, Nsukka campus.
 
+## v0.9: real hostels, courses and places
+
+- **15 real hostels** (2 boys: Alvan Ikoku, Eni Njoku; 13 girls: Akintola, Akpabio, Awolowo, Balewa, Bello, Eyo-ita, Isa Kaita, Kwame Nkrumah,
+  Mary Slessor, Okeke, Okpara, Presidential, Tetfund). Okpara and Tetfund have no map position yet, so nobody is allocated there.
+  Bed counts and rumours are game design, not campus facts. Girls are spread across the hostels by department; pharmacy girls go to Bello.
+- **11 Engineering departments** from the faculty signboard.
+- **63 places**, up from 35: Container (food, textbooks, photocopy), SUB, Marlima, Student Affairs, CEDR, Bookshop, Bursary, Zenith ICT Centre,
+  Fidelity / Zenith / Access / First Bank, Freedom Square, UNN Fountain, Lion FM, Innovation Centre and more.
+  Places marked `approx: true` are estimates (30-60 m) from map screenshots. Positions come from `UNN_campus_notes_part2.md`.
+- Old saves are migrated: a hostel allocation to a hostel that no longer exists is cleared.
+- Left out on purpose: low-confidence spots (Main Gate, 2nd Gate, Roban, GT Bank, town hotels, sports pitches) until checked.
+
+## v0.8: the toy-town look
+
+- **Own map style** (`lib/mapStyle.ts`): green ground, painted grey roads with kerbs and lane lines, red-earth tracks, blue water.
+  Road widths are drawn in real metres so they match the buildings. No street-name labels; the game draws its own chips.
+- **Colourful buildings:** wall colours follow the real photos where known (library blue, Abuja yellow, GS green, Arts maroon...), pastel variety elsewhere,
+  plus coloured roofs (red, green, grey, blue). Colours are set in the data build, not guessed at runtime.
+- **3,300 trees** (`public/data/trees.json`), scattered beside buildings. These are generated, not mapped: they are scenery.
+- **Day / dusk / night:** the map tint follows the in-game clock.
+- Still open from the photos: lion monuments, gates, hostel names and the other fixes planned for the data pass.
+
 ## v0.7: the real campus
 
 - **Real buildings.** `public/data/campus.geojson` holds about 8,300 building outlines and 13 sports/leisure shapes
