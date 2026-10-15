@@ -2,6 +2,16 @@
 
 Browser-based student life simulation set on the University of Nigeria, Nsukka campus.
 
+## v1.0: your room
+
+- **Room view** in the Home tab (`lib/roomScene.ts`, `components/RoomView.tsx`): an isometric room in the same toy style as the map.
+  Hostel rooms show bunk beds (one per two roommates, up to four), a study desk, a locker, buckets, a cooking corner, a window and a door.
+  Off-campus rooms show a proper bed, sofa, shower and cooker.
+- Tap anything in the room for actions: sleep or nap, study, fetch water or bath, cook indomie or rice (costs money), gist with roommates, look outside, go outside.
+- Roommates stand in the room: all of them at night, about half in the daytime. The room gets a night tint and lit bulbs from the in-game clock.
+- You can only enter your room when you are at your hostel on the map; otherwise Home shows a "Show my hostel on the map" button.
+- Room art uses reference photos of real hostel rooms (metal bunks, orange plastic chairs, buckets, pots, lockers) from `UNN_campus_notes.md`.
+
 ## v0.9: real hostels, courses and places
 
 - **15 real hostels** (2 boys: Alvan Ikoku, Eni Njoku; 13 girls: Akintola, Akpabio, Awolowo, Balewa, Bello, Eyo-ita, Isa Kaita, Kwame Nkrumah,

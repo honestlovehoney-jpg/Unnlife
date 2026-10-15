@@ -3,13 +3,14 @@
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { usePlayerStore } from "@/lib/playerStore";
-import { getPlace, streetItems } from "@/lib/places";
+import { getPlace, places, streetItems } from "@/lib/places";
 import { AT_PLACE_M, MODES, clockLabel, dayPhase, distanceM, quote, type ModeId } from "@/lib/travel";
 import type { TravelState } from "@/components/MapView";
 import PlaceSheet from "@/components/PlaceSheet";
 import PhonePanel from "@/components/PhonePanel";
 import HomePanel from "@/components/HomePanel";
 import BuyPanel from "@/components/BuyPanel";
+import type { RoomAction } from "@/lib/roomActions";
 import CreateCharacter from "@/components/CreateCharacter";
 
 const MapView = dynamic(() => import("@/components/MapView"), { ssr: false });
@@ -74,6 +75,8 @@ export default function Home() {
   const dist = place ? distanceM(here, [place.lng, place.lat]) : 0;
   const atPlace = !!place && dist <= AT_PLACE_M;
   const clock = clockLabel(s.gameMinutes);
+  const homePlace = s.allocatedHostel ? places.find((p) => p.hostelId === s.allocatedHostel) : undefined;
+  const atHome = !homePlace || distanceM(here, [homePlace.lng, homePlace.lat]) <= AT_PLACE_M;
 
   const select = (id: string | null) => {
     if (travel) return;
@@ -99,6 +102,17 @@ export default function Home() {
     if (!a) return;
     const ok = usePlayerStore.getState().applyEffect({ cost: a.cost, earn: a.earn, minutes: a.minutes, needs: a.needs });
     setToast(ok ? a.msg : "Not enough money");
+  };
+
+  const roomAct = (a: RoomAction) => {
+    const ok = usePlayerStore.getState().applyEffect({ cost: a.cost, minutes: a.minutes, needs: a.needs });
+    setToast(ok ? a.msg : "Not enough money");
+  };
+
+  const goHome = () => {
+    if (!homePlace) return;
+    setSelectedId(homePlace.id);
+    setTab("map");
   };
 
   const buy = (id: string) => {
@@ -136,7 +150,9 @@ export default function Home() {
         />
       )}
       {tab === "phone" && <PhonePanel onClose={() => setTab("map")} />}
-      {tab === "home" && <HomePanel onClose={() => setTab("map")} onPhone={() => setTab("phone")} />}
+      {tab === "home" && (
+        <HomePanel onClose={() => setTab("map")} onPhone={() => setTab("phone")} atHome={atHome} onGoHome={goHome} onAct={roomAct} />
+      )}
       {tab === "buy" && <BuyPanel money={s.money} needs={s.needs} onBuy={buy} onClose={() => setTab("map")} />}
 
       <div className="needs">

@@ -161,3 +161,10 @@ h4.fac { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; colo
 .map.night .maplibregl-canvas { filter: brightness(.46) saturate(.8) contrast(1.08) hue-rotate(8deg); }
 .chip { font-size: 12px; }
 .chip .chip-e { font-size: 17px; width: 26px; height: 26px; }
+
+/* ---- room view ---- */
+.room { border-radius: 16px; overflow: hidden; background: #1c2340; margin-bottom: 8px; }
+.room svg { display: block; width: 100%; height: auto; }
+.rm-obj { cursor: pointer; }
+.room-actions { margin-bottom: 10px; }
+.room-title { font-size: 14px; font-weight: 700; margin-bottom: 8px; }
